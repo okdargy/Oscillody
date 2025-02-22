@@ -1,0 +1,39 @@
+[gd_scene load_steps=12 format=3 uid="uid://b2egkbqhn0ve"]
+
+[ext_resource type="PackedScene" uid="uid://bwfgwouqqrmsu" path="res://Scenes/oscilloscope.tscn" id="1_t3r4i"]
+[ext_resource type="Script" path="res://Scripts/visualizer_screen.gd" id="1_unj4c"]
+[ext_resource type="PackedScene" uid="uid://b3eaik2uo1rx6" path="res://Scenes/world_environment.tscn" id="2_1kfey"]
+[ext_resource type="PackedScene" uid="uid://b3w3av0xqrx4g" path="res://Scenes/bg_shader_canvas.tscn" id="2_tl0cv"]
+[ext_resource type="PackedScene" uid="uid://y42q1aipkei5" path="res://Scenes/bg_image_canvas.tscn" id="4_hgkf4"]
+[ext_resource type="PackedScene" uid="uid://dlkl4xfcgwflc" path="res://Scenes/solid_col_frames.tscn" id="5_mkgg5"]
+[ext_resource type="PackedScene" uid="uid://b025lmq37pa7" path="res://Scenes/dividers.tscn" id="7_q3p2q"]
+[ext_resource type="PackedScene" uid="uid://bew8ccqn3tw2c" path="res://Scenes/icon.tscn" id="9_3kcg7"]
+[ext_resource type="PackedScene" uid="uid://d0k2bb5axx4xk" path="res://Scenes/audio_players.tscn" id="9_7vbml"]
+[ext_resource type="PackedScene" uid="uid://d2ebf52gc4h5a" path="res://Scenes/title_control.tscn" id="9_iyg18"]
+[ext_resource type="PackedScene" uid="uid://h24dhnpe54qn" path="res://Scenes/post_processing_canvas.tscn" id="10_hh2g1"]
+
+[node name="VisualizerScreen" type="Node2D"]
+script = ExtResource("1_unj4c")
+
+[node name="WorldEnvironment" parent="." instance=ExtResource("2_1kfey")]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="BGShaderCanvas" parent="CanvasLayer" instance=ExtResource("2_tl0cv")]
+
+[node name="BGImageCanvas" parent="CanvasLayer" instance=ExtResource("4_hgkf4")]
+
+[node name="SolidColFrames" parent="CanvasLayer" instance=ExtResource("5_mkgg5")]
+
+[node name="Oscilloscope" parent="CanvasLayer" instance=ExtResource("1_t3r4i")]
+
+[node name="Dividers" parent="CanvasLayer" instance=ExtResource("7_q3p2q")]
+
+[node name="Icon" parent="CanvasLayer" instance=ExtResource("9_3kcg7")]
+
+[node name="TitleControl" parent="CanvasLayer" instance=ExtResource("9_iyg18")]
+
+[node name="PostProcessingCanvas" parent="CanvasLayer" instance=ExtResource("10_hh2g1")]
+
+[node name="AudioPlayers" parent="CanvasLayer" instance=ExtResource("9_7vbml")]

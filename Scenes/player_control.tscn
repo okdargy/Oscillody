@@ -1,0 +1,117 @@
+[gd_scene load_steps=4 format=3 uid="uid://dnf05vfocusj8"]
+
+[ext_resource type="Script" path="res://Scripts/player_control.gd" id="1_ogrew"]
+[ext_resource type="Theme" uid="uid://c1jv3e8d5qb8x" path="res://Themes/main_theme.tres" id="2_pibfw"]
+[ext_resource type="Texture2D" uid="uid://detaekmk7820v" path="res://Themes/Theme Assets/panel_texture.png" id="3_mu6cj"]
+
+[node name="PlayerControl" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 560.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ogrew")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+custom_minimum_size = Vector2(0, 84)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer"]
+layout_mode = 2
+theme = ExtResource("2_pibfw")
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/PanelContainer"]
+modulate = Color(1, 1, 1, 0.156863)
+layout_mode = 2
+texture = ExtResource("3_mu6cj")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 20
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="PlayPauseButton" type="Button" parent="MarginContainer/PanelContainer/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+text = "Play"
+
+[node name="StopButton" type="Button" parent="MarginContainer/PanelContainer/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+text = "Stop"
+
+[node name="LoopButton" type="Button" parent="MarginContainer/PanelContainer/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+toggle_mode = true
+text = "Loop"
+
+[node name="VolSlider" type="HSlider" parent="MarginContainer/PanelContainer/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(84, 44)
+layout_mode = 2
+max_value = 1.0
+step = 0.0
+value = 1.0
+scrollable = false
+
+[node name="VolValDisplay" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(44, 0)
+layout_mode = 2
+text = "100%"
+
+[node name="SeekSlider" type="HSlider" parent="MarginContainer/PanelContainer/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(400, 44)
+layout_mode = 2
+scrollable = false
+
+[node name="SeekTimeDisplay" type="Label" parent="MarginContainer/PanelContainer/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0:00 | 0:00"
+
+[node name="Control" type="Control" parent="MarginContainer/PanelContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="AudioPosHint" type="Label" parent="MarginContainer/PanelContainer/Control"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+offset_left = 371.0
+offset_top = 5.0
+offset_right = 403.0
+offset_bottom = 28.0
+text = "0:00"
+
+[connection signal="gui_input" from="MarginContainer/PanelContainer" to="." method="_on_panel_container_gui_input"]
+[connection signal="pressed" from="MarginContainer/PanelContainer/MarginContainer/HBoxContainer/PlayPauseButton" to="." method="_on_play_pause_button_pressed"]
+[connection signal="pressed" from="MarginContainer/PanelContainer/MarginContainer/HBoxContainer/StopButton" to="." method="_on_stop_button_pressed"]
+[connection signal="toggled" from="MarginContainer/PanelContainer/MarginContainer/HBoxContainer/LoopButton" to="." method="_on_loop_button_toggled"]
+[connection signal="value_changed" from="MarginContainer/PanelContainer/MarginContainer/HBoxContainer/VolSlider" to="." method="_on_vol_slider_value_changed"]
+[connection signal="drag_ended" from="MarginContainer/PanelContainer/MarginContainer/HBoxContainer/SeekSlider" to="." method="_on_seek_slider_drag_ended"]
+[connection signal="gui_input" from="MarginContainer/PanelContainer/MarginContainer/HBoxContainer/SeekSlider" to="." method="_on_seek_slider_gui_input"]
+[connection signal="mouse_entered" from="MarginContainer/PanelContainer/MarginContainer/HBoxContainer/SeekSlider" to="." method="_on_seek_slider_mouse_entered"]
+[connection signal="mouse_exited" from="MarginContainer/PanelContainer/MarginContainer/HBoxContainer/SeekSlider" to="." method="_on_seek_slider_mouse_exited"]
+[connection signal="value_changed" from="MarginContainer/PanelContainer/MarginContainer/HBoxContainer/SeekSlider" to="." method="_on_seek_slider_value_changed"]

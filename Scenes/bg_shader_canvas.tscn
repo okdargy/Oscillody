@@ -1,0 +1,42 @@
+[gd_scene load_steps=6 format=3 uid="uid://b3w3av0xqrx4g"]
+
+[ext_resource type="Script" path="res://Scripts/bg_shader_canvas.gd" id="1_chgca"]
+[ext_resource type="Shader" path="res://Scripts/background_shader.gdshader" id="2_l6yd8"]
+[ext_resource type="Shader" path="res://Scripts/blur.gdshader" id="3_hw0g7"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rp5y5"]
+shader = ExtResource("2_l6yd8")
+shader_parameter/user_color_mix = null
+shader_parameter/user_color = Color(0, 0, 1, 1)
+shader_parameter/user_frequency_factor = 2.0
+shader_parameter/user_amplitude = 0.5
+shader_parameter/user_speed = 0.1
+shader_parameter/user_octaves = 6
+shader_parameter/user_frequency_increment = 2.0
+shader_parameter/user_amplitude_decrement = 0.5
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v8xjc"]
+shader = ExtResource("3_hw0g7")
+shader_parameter/blur_strength = null
+
+[node name="BGShaderCanvas" type="CanvasLayer"]
+layer = -2
+visible = false
+script = ExtResource("1_chgca")
+
+[node name="BGShaderRect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_rp5y5")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Blur" type="ColorRect" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_v8xjc")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

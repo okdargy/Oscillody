@@ -1,0 +1,72 @@
+[gd_scene load_steps=11 format=3 uid="uid://h24dhnpe54qn"]
+
+[ext_resource type="Script" path="res://Scripts/post_processing_canvas.gd" id="1_mscrk"]
+[ext_resource type="Shader" path="res://Scripts/chromatic_aberration.gdshader" id="2_0xs3i"]
+[ext_resource type="Shader" path="res://Scripts/vignette.gdshader" id="4_els8c"]
+[ext_resource type="Shader" path="res://Scripts/grain.gdshader" id="5_aauo8"]
+[ext_resource type="Shader" path="res://Scripts/soft_light.gdshader" id="5_ulfj3"]
+[ext_resource type="Texture2D" uid="uid://bfpp3dlxwxshj" path="res://Images/NoiseStrong.png" id="6_7orx6"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lbmj3"]
+shader = ExtResource("2_0xs3i")
+shader_parameter/strength = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8kmcy"]
+shader = ExtResource("4_els8c")
+shader_parameter/vignette_color = Color(0, 0, 0, 0)
+shader_parameter/vignette_size = 1.2
+shader_parameter/vignette_sharpness = 12.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tn3bc"]
+shader = ExtResource("5_aauo8")
+shader_parameter/opacity = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kqm2e"]
+shader = ExtResource("5_ulfj3")
+shader_parameter/opacity = 0.0
+
+[node name="PostProcessingCanvas" type="CanvasLayer"]
+script = ExtResource("1_mscrk")
+
+[node name="ChromaticAberrationCanvas" type="CanvasLayer" parent="."]
+
+[node name="ChromaticAberration" type="ColorRect" parent="ChromaticAberrationCanvas"]
+visible = false
+material = SubResource("ShaderMaterial_lbmj3")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VignetteCanvas" type="CanvasLayer" parent="."]
+
+[node name="Vignette" type="ColorRect" parent="VignetteCanvas"]
+visible = false
+material = SubResource("ShaderMaterial_8kmcy")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GrainCanvas" type="CanvasLayer" parent="."]
+
+[node name="Grain" type="ColorRect" parent="GrainCanvas"]
+visible = false
+material = SubResource("ShaderMaterial_tn3bc")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GrainTexture" type="TextureRect" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_kqm2e")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_7orx6")

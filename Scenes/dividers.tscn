@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://b025lmq37pa7"]
+
+[ext_resource type="Script" path="res://Scripts/dividers.gd" id="1_l7xed"]
+
+[node name="Dividers" type="Control"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_l7xed")
+
+[node name="DividerOne" type="ColorRect" parent="."]
+layout_mode = 0
+
+[node name="DividerTwo" type="ColorRect" parent="."]
+layout_mode = 0
