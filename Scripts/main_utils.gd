@@ -278,25 +278,91 @@ func add_to_queue(buffer_idx: int, temporary_buffer: PackedVector2Array, average
 	return buffer_queue_list[buffer_idx]
 
 # Converts audio file into playable object, using the file's bytes.
-func convert_to_playable(audio_path: String) -> AudioStreamMP3:
-	var stream: AudioStreamMP3 = AudioStreamMP3.new()
-	if audio_path != "":
-		var file: FileAccess = FileAccess.open(audio_path, FileAccess.READ)
-		if file == null:
-			logger("Audio file is null: " + audio_path + ". Error: " + error_string(FileAccess.get_open_error()), true)
-			return
-		var bytes: PackedByteArray = file.get_buffer(file.get_length())
-		if bytes.is_empty():
-			logger("Audio file returned no bytes.", true)
-			return
-		stream = AudioStreamMP3.new()
-		stream.data = bytes
-		file.close()
-		logger("Audio file converted to playable object: " + audio_path)
-		return stream
-	else:
+func convert_to_playable(audio_path: String) -> AudioStream:
+	if audio_path.is_empty():
 		logger("Audio path is empty.", true, true)
 		return
+		
+	var extension: String = audio_path.get_extension().to_lower()
+	var supported_formats: Array = ["mp3", "ogg", "wav"]
+
+	if not extension in supported_formats:
+		logger("Unsupported audio format: " + extension, true)
+		return
+	
+	var file: FileAccess = FileAccess.open(audio_path, FileAccess.READ)
+	if file == null:
+		logger("Audio file is null: " + audio_path + ". Error: " + error_string(FileAccess.get_open_error()), true)
+		return
+	
+	var bytes: PackedByteArray = file.get_buffer(file.get_length())
+	if bytes.is_empty():
+		logger("Audio file returned no bytes.", true)
+		file.close()
+		return
+	
+	var stream: AudioStream
+	match extension:
+		"mp3":
+			stream = AudioStreamMP3.new()
+			stream.data = bytes
+		"ogg":
+			stream = AudioStreamOggVorbis.load_from_buffer(bytes)
+		"wav":
+			stream = parse_wav_data(bytes)
+			if not stream:
+				logger("Invalid WAV file, only 8 and 16 bit supported", true)
+				file.close()
+				return
+				
+	file.close()
+	logger("Audio file converted to playable object: " + audio_path)
+	return stream
+
+## Parses bytes to a WAV audio stream, only 8 and 16 bit supported
+## This code is from https://github.com/monologue-tool/monologue which is adapted from https://github.com/Gianclgar/GDScriptAudioImport, both being MIT-licensed
+func parse_wav_data(bytes: PackedByteArray) -> AudioStreamWAV:
+	var stream = AudioStreamWAV.new()
+	var bits_per_sample = 0
+	
+	# read the .wav header in bytes, then assign values to the AudioStreamWAV
+	for i in range(0, 43):
+		var byte_chunk = str(char(bytes[i]) + char(bytes[i + 1]) + \
+				char(bytes[i + 2]) + char(bytes[i + 3]))
+		if byte_chunk == "fmt ":
+			var start = i + 8  # audio format starts 8 bytes after "fmt "
+
+			# set format code (bytes 0-1)
+			var format_code = bytes[start] + (bytes[start + 1] << 8)
+			stream.format = format_code
+			
+			# set channel number (bytes 2-3)
+			var channel_number = bytes[start + 2] + (bytes[start + 3] << 8)
+			stream.stereo = channel_number == 2
+			
+			# set sample rate (bytes 4-7)
+			var sample_rate = bytes[start + 4] + (bytes[start + 5] << 8) + \
+					(bytes[start + 6] << 16) + (bytes[start + 7] << 24)
+			stream.mix_rate = sample_rate
+		
+			# set bits per sample/bitrate (bytes 14-15)
+			bits_per_sample = bytes[start + 14] + (bytes[start + 15] << 8)
+			if bits_per_sample not in [8, 16]:
+				return
+		
+		elif byte_chunk == "data":
+			var start = i + 8  # starts 8 bytes after "data"
+			var size = bytes[i + 4] + (bytes[i + 5] << 8) + \
+					(bytes[i + 6] << 16) + (bytes[i + 7] << 24)
+			stream.data = bytes.slice(start, start + size)
+			break
+	
+	# calculate the size of each sample based on bits_per_sample
+	var sample_size = bits_per_sample / 8.0
+	# get samples and set loop end
+	var sample_number = stream.data.size() / sample_size
+	stream.loop_end = sample_number
+	return stream if stream.data else null
 
 func update_utils() -> void:
 	update_copies()

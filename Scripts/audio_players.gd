@@ -45,7 +45,7 @@ func _ready() -> void:
 	MainUtils.new_audio_master_selected.connect(reset_audio_position_on_new_master)
 	
 func _process(_delta: float) -> void:
-	if GlobalVariables.master_audio_path != "":
+	if GlobalVariables.master_audio_path != "" and master_player.stream != null:
 		MainUtils.audio_duration = floor(master_player.stream.get_length())
 	if not new_position_on_audio_stopped and GlobalVariables.master_audio_path != "":
 		MainUtils.audio_position = master_player.get_playback_position()

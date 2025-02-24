@@ -48,11 +48,17 @@ var stem_4_filename: String = "NOT SELECTED"
 #endregion ##################################
 
 func _ready() -> void:
-	master_file_dialog.set_filters(PackedStringArray(["*.mp3 ; MP3 Files"]))
-	stem_1_file_dialog.set_filters(PackedStringArray(["*.mp3 ; MP3 Files"]))
-	stem_2_file_dialog.set_filters(PackedStringArray(["*.mp3 ; MP3 Files"]))
-	stem_3_file_dialog.set_filters(PackedStringArray(["*.mp3 ; MP3 Files"]))
-	stem_4_file_dialog.set_filters(PackedStringArray(["*.mp3 ; MP3 Files"]))
+	const AUDIO_FILTERS = [
+		"*.mp3 ; MP3 Files",
+		"*.ogg ; OGG Files",
+		"*.wav ; WAV Files",
+	]
+	
+	master_file_dialog.set_filters(PackedStringArray(AUDIO_FILTERS))
+	stem_1_file_dialog.set_filters(PackedStringArray(AUDIO_FILTERS))
+	stem_2_file_dialog.set_filters(PackedStringArray(AUDIO_FILTERS))
+	stem_3_file_dialog.set_filters(PackedStringArray(AUDIO_FILTERS))
+	stem_4_file_dialog.set_filters(PackedStringArray(AUDIO_FILTERS))
 	ffmpeg_file_dialog.set_filters(PackedStringArray(["*.exe ; EXE Files"]))
 	export_file_dialog.set_filters(PackedStringArray(["*.mp4 ; MP4 Video"]))
 	
@@ -75,7 +81,7 @@ func _on_import_m_value_pressed() -> void:
 
 func _on_master_file_dialog_file_selected(path: String) -> void:
 	GlobalVariables.master_audio_path = path
-	master_filename = path.get_file().replace(".mp3", "")
+	master_filename = path.get_file().get_basename()
 	display_filenames()
 
 func _on_import_s_1_value_pressed() -> void:
@@ -83,7 +89,7 @@ func _on_import_s_1_value_pressed() -> void:
 
 func _on_stem_1_file_dialog_file_selected(path: String) -> void:
 	GlobalVariables.stem_1_audio_path = path
-	stem_1_filename = path.get_file().replace(".mp3", "")
+	stem_1_filename = path.get_file().get_basename()
 	display_filenames()
 
 func _on_import_s_2_value_pressed() -> void:
@@ -91,7 +97,7 @@ func _on_import_s_2_value_pressed() -> void:
 
 func _on_stem_2_file_dialog_file_selected(path: String) -> void:
 	GlobalVariables.stem_2_audio_path = path
-	stem_2_filename = path.get_file().replace(".mp3", "")
+	stem_2_filename = path.get_file().get_basename()
 	display_filenames()
 
 func _on_import_s_3_value_pressed() -> void:
@@ -99,7 +105,7 @@ func _on_import_s_3_value_pressed() -> void:
 
 func _on_stem_3_file_dialog_file_selected(path: String) -> void:
 	GlobalVariables.stem_3_audio_path = path
-	stem_3_filename = path.get_file().replace(".mp3", "")
+	stem_3_filename = path.get_file().get_basename()
 	display_filenames()
 
 func _on_import_s_4_value_pressed() -> void:
@@ -107,7 +113,7 @@ func _on_import_s_4_value_pressed() -> void:
 
 func _on_stem_4_file_dialog_file_selected(path: String) -> void:
 	GlobalVariables.stem_4_audio_path = path
-	stem_4_filename = path.get_file().replace(".mp3", "")
+	stem_4_filename = path.get_file().get_basename()
 	display_filenames()
 
 func _on_ffmpeg_value_pressed() -> void:
